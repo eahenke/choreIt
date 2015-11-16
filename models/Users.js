@@ -6,6 +6,7 @@ var UserSchema = new mongoose.Schema({
     username: {type: String, lowercase: true, unique: true},
     hash: String,
     salt: String
+    weeks: [{type: mongoose.Schema.Types.ObjectId, ref: 'Week'}];
 });
 
 UserSchema.methods.setPassword = function(password) {
