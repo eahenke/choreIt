@@ -1,11 +1,75 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+    <head>
+      <title>ChoreIt</title>
+    
+      <!-- Meta -->
+      <meta charset="utf-8" />
+      <meta name="author" content="Eric Henke" />
+      <meta name="viewport" content="width=device-width" /> 
+
+      <!-- Stylesheets -->
+      <link href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet">
+      <link rel="stylesheet" type="text/css" href="/stylesheets/main.css">
+
+      <!-- Scripts -->
+      <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.3.10/angular.js"></script>
+      <script src="http://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.10/angular-ui-router.js"></script>
+      <script src="/javascripts/main.js"></script>
+    </head>
+    <body ng-app="choreIt">
+        <nav class="navbar navbar-default pull-right">
+            <ul class="nav navbar-nav">
+                <li><a href=''>Register</a></li>
+                <li><a href=''>Login</a></li>
+            </ul>
+        </nav>
+
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <div class="page-header">
+                    <h1>ChoreIt</h1>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+                <ui-view></ui-view>
+        </div>
+
+
+    <script type="text/ng-template" id="/home.html">
+        
+        <div class="col-md-3">
+            <h2>Weeks</h2>
+            <ul>
+                <li ng-repeat="week in main.weeks" ng-click="main.setActiveWeek($index)"> {{week.week}}</li>
+            </ul>
+        </div>
+
+        <div class="col-md-5">
+            <h2>Chores</h2>
+            <table class="table table-bordered">                
+                <tr ng-repeat="chore in main.activeWeek.chores">
+                    <td ng-class="{completed: chore.complete}">{{chore.body}}</td>
+                    <td ng-click="main.toggleComplete(chore)">Toggle</td>
+                    <td>Delete</td>
+                    <td>Edit</td>
+                </tr>
+            </table>
+
+            <form ng-submit="main.addChore()">
+                <h3>Add a new chore</h3>
+                <div class="form-group">
+                    <input type="text" placeholder="Chore" ng-model="main.newChore">
+                    <br />
+                </div>
+
+                <button type="submit">Add</button>          
+            </form>
+        </div>
+    </script>
+
+
+
   </body>
-</html>
