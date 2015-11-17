@@ -76,10 +76,13 @@
         </div>
 
         <div class="col-md-5">
-            <p ng-show="!main.groups.length">You don&#39;t have any groups yet.  Please add a group</p>
+            <p class="no-groups no-content-warning bg-warning" ng-show="!main.groups.length">You don&#39;t have any groups yet.  Please add a group.</p>
             <div class='chores' ng-show="main.activeGroup">
                 <h2>Chores</h2>
                 <h3>{{main.activeGroup.title}}</h3>
+
+                <!--add warning for no chores.  currently doesnt update-->
+
                 <table class="table table-bordered">                
                     <tr ng-repeat="chore in main.activeGroup.chores">
                         <td ng-class="{completed: chore.complete}">{{chore.body}}</td>
