@@ -18,7 +18,11 @@
                 templateUrl: '/login.html',
                 controller: 'AuthCtrl',
                 controllerAs: 'auth',
-                onEnter: [] //add in when wiring to backend, check if already logged
+                onEnter: ['$state', 'auth', function($state, auth) {
+                    if(auth.isLoggedIn()) {
+                        $state.go('home');
+                    }
+                }] //add in when wiring to backend, check if already logged
             })
             //state for registering new users
             .state('register', {
@@ -26,7 +30,11 @@
                 templateUrl: '/register.html',
                 controller: 'AuthCtrl',
                 controllerAs: 'auth',
-                onEnter: [] //add in when wiring to backend, check if already logged
+                onEnter: ['$state', 'auth', function($state, auth) {
+                    if(auth.isLoggedIn()) {
+                        $state.go('home');
+                    }
+                }]
             });
 
         $urlRouterProvider.otherwise('home');
