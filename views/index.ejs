@@ -54,12 +54,14 @@
             </form>
 
             <ul>
-                <li ng-repeat="group in main.groups | orderBy: 'date'" ng-click="main.setActiveGroup(group)"> {{group.title}}</li>
+                <li ng-repeat-start="group in main.groups | orderBy: 'date'" ng-click="main.setActiveGroup(group)"> {{group.title}}
+                </li>
+                <span ng-repeat-end ng-click="main.deleteGroup(group)">Delete</span>
             </ul>
 
         </div>
 
-        <div class="col-md-5">
+        <div class="col-md-5" ng-show="main.activeGroup">
             <h2>Chores</h2>
             <h3>{{main.activeGroup.title}}</h3>
             <table class="table table-bordered">                

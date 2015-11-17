@@ -147,45 +147,6 @@
         var o = {
             groups: [],
         };
-            //dummy data
-        //     weeks: [
-        //         {
-        //             week: 1,
-        //             chores: [
-        //                 {
-        //                     body: 'Take out the trash',
-        //                     complete: false,
-        //                 },
-        //                 {
-        //                     body: 'Mop the floor',
-        //                     complete: false,
-        //                 },
-        //                 {
-        //                     body: 'Do the dishes',
-        //                     complete: true,
-        //                 },
-        //             ]
-        //         },
-
-        //         {
-        //             week: 2,
-        //             chores: [
-        //                 {
-        //                     body: 'Take out the recycling',
-        //                     complete: false,
-        //                 },
-        //                 {
-        //                     body: 'Mop the floor',
-        //                     complete: true,
-        //                 },
-        //                 {
-        //                     body: 'Clean the refrigerator',
-        //                     complete: true,
-        //                 },
-        //             ]
-        //         }
-        //     ]            
-        // };
 
         o.getAllGroups = function() {
             return $http.get('/groups', {
@@ -203,12 +164,17 @@
             });
         };
 
+        o.deleteGroup = function(id) {
+            return $http.delete('/groups/' + id, {
+                headers: {Authorization: 'Bearer ' + auth.getToken()}
+            });
+        };
+
         o.addChore = function(id, chore) {
             return $http.post('/groups/' + id + '/chore', chore, {
                 headers: {Authorization: 'Bearer ' + auth.getToken()}
             });
-        }
-
+        };
 
 
         return o;
@@ -221,7 +187,7 @@
 
     var choreIt = angular.module('choreIt');
 
-    choreIt.controller('MainCtrl', ['chores', 'auth', function(chores, auth) {
+    choreIt.controller('MainCtrl', ['$scope', 'chores', 'auth', function($scope, chores, auth) {
         var self = this;
 
         self.groups = chores.groups;
@@ -268,7 +234,20 @@
                     //no, just a link
                 }
             }
-        }        
+        };
+
+        self.deleteGroup = function(group) {
+            // console.dir(self.groups.indexOf(group));
+            chores.deleteGroup(group._id).then(function() {
+                //update local copy
+                console.dir(self.groups.indexOf(group));
+                self.groups.splice(self.groups.indexOf(group), 1);
+                
+                if(group == self.activeGroup) {
+                    self.activeGroup = null;
+                }
+            });
+        }
         
     }]);
 

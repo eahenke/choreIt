@@ -2,7 +2,7 @@
 
     var choreIt = angular.module('choreIt');
 
-    choreIt.controller('MainCtrl', ['chores', 'auth', function(chores, auth) {
+    choreIt.controller('MainCtrl', ['$scope', 'chores', 'auth', function($scope, chores, auth) {
         var self = this;
 
         self.groups = chores.groups;
@@ -49,7 +49,20 @@
                     //no, just a link
                 }
             }
-        }        
+        };
+
+        self.deleteGroup = function(group) {
+            // console.dir(self.groups.indexOf(group));
+            chores.deleteGroup(group._id).then(function() {
+                //update local copy
+                console.dir(self.groups.indexOf(group));
+                self.groups.splice(self.groups.indexOf(group), 1);
+                
+                if(group == self.activeGroup) {
+                    self.activeGroup = null;
+                }
+            });
+        }
         
     }]);
 

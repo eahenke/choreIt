@@ -21,6 +21,21 @@ router.get('/', function(req, res, next) {
 
 module.exports = router;
 
+//group preloader
+router.param('group', function(req, res, next, id) {
+    var query = Group.findById(id);
+
+    query.exec(function(err, group) {
+        if(err) {
+            return next(err);
+        }
+        if(!group) {
+            return next(new Error('Can\'t find group'));
+        }
+        req.group = group;
+        return next();
+    })
+});
 
 //view all groups
 //request will have to have a user
@@ -48,21 +63,6 @@ router.post('/groups', auth, function(req, res, next) {
     })
 });
 
-//group preloader
-router.param('group', function(req, res, next, id) {
-    var query = Group.findById(id);
-
-    query.exec(function(err, group) {
-        if(err) {
-            return next(err);
-        }
-        if(!group) {
-            return next(new Error('Can\'t find group'));
-        }
-        req.group = group;
-        return next();
-    })
-});
 
 //add a new chore
 router.post('/groups/:group/chore', auth, function(req, res, next) {
@@ -81,6 +81,17 @@ router.post('/groups/:group/chore', auth, function(req, res, next) {
             res.json(chore);
         });
     });
+});
+
+router.delete('/groups/:group', auth, function(req, res, next) {
+    var group = req.group;
+    group.remove(function(err) {
+        if(err) {
+            return next(err);
+        }
+        console.log('deleting group');
+        res.json(group);
+    })
 });
 
 
