@@ -7,6 +7,18 @@ html {
     border-right: 1px solid #eee;
 }
 
+.group {
+    font-size: 1.3em;
+    border-bottom: 1px solid #eee;
+    padding: 10px;
+}
+
+.del {
+    cursor: pointer;
+}
+
+
+
 form {
     margin-top: 30px;
 }

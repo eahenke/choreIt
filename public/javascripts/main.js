@@ -11,11 +11,34 @@
                 templateUrl: '/home.html',
                 controller: 'MainCtrl',
                 controllerAs: 'main',
+                // resolve: {
+                //     groupPromise: ['chores', function(chores) {
+                //         return chores.getAllGroups();
+                //     }]
+                // },
+                onEnter: ['auth', '$state', function(auth, $state) {
+                    if(auth.isLoggedIn()) {
+                        $state.go('chores');
+                    }
+                }]
+
+            })
+            .state('chores', {
+                url: '/chores',
+                templateUrl: '/chores.html',
+                controller: 'MainCtrl',
+                controllerAs: 'main',
                 resolve: {
                     groupPromise: ['chores', function(chores) {
                         return chores.getAllGroups();
                     }]
-                }
+                },
+                onEnter: ['auth', '$state', function(auth, $state) {
+                    if(!auth.isLoggedIn()) {
+                        $state.go('home');
+                    }
+                }]
+
             })
             //state for logging in returning users
             .state('login', {
@@ -80,7 +103,7 @@
 ;(function(){
     var choreIt = angular.module('choreIt');
 
-    choreIt.factory('auth', ['$window', '$http', function($window, $http) {        
+    choreIt.factory('auth', ['$window', '$http', '$state', function($window, $http, $state) {        
         var auth = {};
 
         auth.getToken = function() {
@@ -93,6 +116,7 @@
 
         auth.logOut = function() {
             $window.localStorage.removeItem('choreIt-token');
+            $state.go('home');
         };
 
         auth.register = function(user) {
@@ -232,6 +256,14 @@
                     group.title = self.newGroup;
                     group.username = auth.currentUser();
                     chores.addGroup(group);
+
+                    // //reassign active group
+                    // if(!self.activeGroup) {
+                    //     self.activeGroup = group;
+                    // }
+
+                    assignActiveGroup('add', group);
+
                     self.newGroup = '';
 
                 } else {
@@ -249,9 +281,16 @@
                 console.dir(self.groups.indexOf(group));
                 self.groups.splice(self.groups.indexOf(group), 1);
                 
-                if(group == self.activeGroup) {
-                    self.activeGroup = null;
-                }
+                // //reassign active group
+                // if(group == self.activeGroup) {
+                //     if(self.groups.length) {
+                //         self.activeGroup = self.groups[self.groups.length -1];
+                //     } else {
+                //         self.activeGroup = null;                        
+                //     }
+                // }
+
+                assignActiveGroup('delete', group);
             });
         };
 
@@ -260,6 +299,24 @@
             chores.deleteChore(group._id, chore._id).then(function() {
                 group.chores.splice(group.chores.indexOf(chore), 1);
             });
+        };
+
+        function assignActiveGroup(action, group) {
+            if(action == 'delete') {
+               //reassign active group
+                if(group == self.activeGroup) {
+                    if(self.groups.length) {
+                        self.activeGroup = self.groups[self.groups.length -1];
+                    } else {
+                        self.activeGroup = null;                        
+                    }
+                } 
+            } else if(action == 'add') {
+                //reassign active group
+                if(!self.activeGroup) {
+                    self.activeGroup = group;
+                }                
+            }
         }
         
     }]);

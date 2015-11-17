@@ -1,7 +1,7 @@
 ;(function(){
     var choreIt = angular.module('choreIt');
 
-    choreIt.factory('auth', ['$window', '$http', function($window, $http) {        
+    choreIt.factory('auth', ['$window', '$http', '$state', function($window, $http, $state) {        
         var auth = {};
 
         auth.getToken = function() {
@@ -14,6 +14,7 @@
 
         auth.logOut = function() {
             $window.localStorage.removeItem('choreIt-token');
+            $state.go('home');
         };
 
         auth.register = function(user) {

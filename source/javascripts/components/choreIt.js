@@ -11,11 +11,34 @@
                 templateUrl: '/home.html',
                 controller: 'MainCtrl',
                 controllerAs: 'main',
+                // resolve: {
+                //     groupPromise: ['chores', function(chores) {
+                //         return chores.getAllGroups();
+                //     }]
+                // },
+                onEnter: ['auth', '$state', function(auth, $state) {
+                    if(auth.isLoggedIn()) {
+                        $state.go('chores');
+                    }
+                }]
+
+            })
+            .state('chores', {
+                url: '/chores',
+                templateUrl: '/chores.html',
+                controller: 'MainCtrl',
+                controllerAs: 'main',
                 resolve: {
                     groupPromise: ['chores', function(chores) {
                         return chores.getAllGroups();
                     }]
-                }
+                },
+                onEnter: ['auth', '$state', function(auth, $state) {
+                    if(!auth.isLoggedIn()) {
+                        $state.go('home');
+                    }
+                }]
+
             })
             //state for logging in returning users
             .state('login', {

@@ -41,6 +41,14 @@
                     group.title = self.newGroup;
                     group.username = auth.currentUser();
                     chores.addGroup(group);
+
+                    // //reassign active group
+                    // if(!self.activeGroup) {
+                    //     self.activeGroup = group;
+                    // }
+
+                    assignActiveGroup('add', group);
+
                     self.newGroup = '';
 
                 } else {
@@ -58,9 +66,16 @@
                 console.dir(self.groups.indexOf(group));
                 self.groups.splice(self.groups.indexOf(group), 1);
                 
-                if(group == self.activeGroup) {
-                    self.activeGroup = null;
-                }
+                // //reassign active group
+                // if(group == self.activeGroup) {
+                //     if(self.groups.length) {
+                //         self.activeGroup = self.groups[self.groups.length -1];
+                //     } else {
+                //         self.activeGroup = null;                        
+                //     }
+                // }
+
+                assignActiveGroup('delete', group);
             });
         };
 
@@ -69,6 +84,24 @@
             chores.deleteChore(group._id, chore._id).then(function() {
                 group.chores.splice(group.chores.indexOf(chore), 1);
             });
+        };
+
+        function assignActiveGroup(action, group) {
+            if(action == 'delete') {
+               //reassign active group
+                if(group == self.activeGroup) {
+                    if(self.groups.length) {
+                        self.activeGroup = self.groups[self.groups.length -1];
+                    } else {
+                        self.activeGroup = null;                        
+                    }
+                } 
+            } else if(action == 'add') {
+                //reassign active group
+                if(!self.activeGroup) {
+                    self.activeGroup = group;
+                }                
+            }
         }
         
     }]);

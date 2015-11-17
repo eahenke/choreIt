@@ -40,7 +40,19 @@
         </div>
 
 
-    <script type="text/ng-template" id="/home.html">
+        <!-- home template -->
+        <script type="text/ng-template" id="/home.html">
+            <div class="col-md-6 col-md-offset-3">
+                <p>Hello, please either
+                    <a href="/#/register">Register</a>
+                    or
+                    <a href="/#/login">Log In</a>
+            </div>
+        </script>
+
+
+        <!-- Chores template -->
+    <script type="text/ng-template" id="/chores.html">
         
         <div class="col-md-3 col-md-offset-1 group-sidebar">
             <h2>Chore Groups</h2>
@@ -53,35 +65,40 @@
                 <button class="btn btn-primary" type="submit">Add Group</button>
             </form>
 
-            <ul>
-                <li ng-repeat-start="group in main.groups | orderBy: 'date'" ng-click="main.setActiveGroup(group)"> {{group.title}}
-                </li>
-                <span ng-repeat-end ng-click="main.deleteGroup(group)">Delete</span>
-            </ul>
+
+            
+                <div class="group" ng-repeat="group in main.groups | orderBy: 'date'" ng-click="main.setActiveGroup(group)">
+                {{group.title}}
+                <a class="del pull-right" href="" ng-click="main.deleteGroup(group)">Delete</a>
+                </div>
+            
 
         </div>
 
-        <div class="col-md-5" ng-show="main.activeGroup">
-            <h2>Chores</h2>
-            <h3>{{main.activeGroup.title}}</h3>
-            <table class="table table-bordered">                
-                <tr ng-repeat="chore in main.activeGroup.chores">
-                    <td ng-class="{completed: chore.complete}">{{chore.body}}</td>
-                    <td ng-click="main.toggleComplete(chore)">Toggle</td>
-                    <td ng-click="main.deleteChore(chore)">Delete</td>
-                    <td>Edit</td>
-                </tr>
-            </table>
+        <div class="col-md-5">
+            <p ng-show="!main.groups.length">You don&#39;t have any groups yet.  Please add a group</p>
+            <div class='chores' ng-show="main.activeGroup">
+                <h2>Chores</h2>
+                <h3>{{main.activeGroup.title}}</h3>
+                <table class="table table-bordered">                
+                    <tr ng-repeat="chore in main.activeGroup.chores">
+                        <td ng-class="{completed: chore.complete}">{{chore.body}}</td>
+                        <td ng-click="main.toggleComplete(chore)">Toggle</td>
+                        <td ng-click="main.deleteChore(chore)">Delete</td>
+                        <td>Edit</td>
+                    </tr>
+                </table>
 
-            <form ng-submit="main.addChore()">
-                <h3>Add a new chore</h3>
-                <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Chore" ng-model="main.newChore">
-                    <br />
-                </div>
+                <form ng-submit="main.addChore()">
+                    <h3>Add a new chore</h3>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Chore" ng-model="main.newChore">
+                        <br />
+                    </div>
 
-                <button class="btn btn-primary" type="submit">Add</button>          
-            </form>
+                    <button class="btn btn-primary" type="submit">Add</button>          
+                </form>
+            </div>
         </div>
     </script>
 
@@ -115,7 +132,7 @@
         </div>
 
         <form ng-submit="auth.logIn()">
-            <h3>Register</h3>
+            <h3>Log In</h3>
             <div class="form-group">
                 <input type="text" class="form-control" placeholder="Username" ng-model="auth.user.username" />
             </div>
