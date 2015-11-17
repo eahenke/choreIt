@@ -1,5 +1,6 @@
 bin/
 node_modules/
+public/
 gulpfile.js
 *.log
 *.txt
