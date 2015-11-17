@@ -1,10 +1,11 @@
 var mongoose = require('mongoose');
 
-var WeekSchema = new mongoose.Schema({
+var GroupSchema = new mongoose.Schema({
     title: String,
     // user: {mongoose.Schema.Types.ObjectId, ref: 'User'},
     username: String,
+    date: {type: Date, default: Date.now},
     chores: [{type: mongoose.Schema.Types.ObjectId, ref: 'Chore'}]
 });
 
-mongoose.model('Week', WeekSchema);
+mongoose.model('Group', GroupSchema);

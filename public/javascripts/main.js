@@ -11,6 +11,11 @@
                 templateUrl: '/home.html',
                 controller: 'MainCtrl',
                 controllerAs: 'main',
+                resolve: {
+                    groupPromise: ['chores', function(chores) {
+                        return chores.getAllGroups();
+                    }]
+                }
             })
             //state for logging in returning users
             .state('login', {
@@ -133,78 +138,138 @@
 ;(function(){
     var choreIt = angular.module('choreIt');
 
-    choreIt.factory('chores', function() {
-        var o = {
-            //dummy data
-            weeks: [
-                {
-                    week: 1,
-                    chores: [
-                        {
-                            body: 'Take out the trash',
-                            complete: false,
-                        },
-                        {
-                            body: 'Mop the floor',
-                            complete: false,
-                        },
-                        {
-                            body: 'Do the dishes',
-                            complete: true,
-                        },
-                    ]
-                },
+    // choreIt.controller('ChoreCtrl', ['chores', 'chore', 'auth', ])
+})();
+;(function(){
+    var choreIt = angular.module('choreIt');
 
-                {
-                    week: 2,
-                    chores: [
-                        {
-                            body: 'Take out the recycling',
-                            complete: false,
-                        },
-                        {
-                            body: 'Mop the floor',
-                            complete: true,
-                        },
-                        {
-                            body: 'Clean the refrigerator',
-                            complete: true,
-                        },
-                    ]
-                }
-            ]            
+    choreIt.factory('chores', ['$http', 'auth', function($http, auth) {
+        var o = {
+            groups: [],
         };
+            //dummy data
+        //     weeks: [
+        //         {
+        //             week: 1,
+        //             chores: [
+        //                 {
+        //                     body: 'Take out the trash',
+        //                     complete: false,
+        //                 },
+        //                 {
+        //                     body: 'Mop the floor',
+        //                     complete: false,
+        //                 },
+        //                 {
+        //                     body: 'Do the dishes',
+        //                     complete: true,
+        //                 },
+        //             ]
+        //         },
+
+        //         {
+        //             week: 2,
+        //             chores: [
+        //                 {
+        //                     body: 'Take out the recycling',
+        //                     complete: false,
+        //                 },
+        //                 {
+        //                     body: 'Mop the floor',
+        //                     complete: true,
+        //                 },
+        //                 {
+        //                     body: 'Clean the refrigerator',
+        //                     complete: true,
+        //                 },
+        //             ]
+        //         }
+        //     ]            
+        // };
+
+        o.getAllGroups = function() {
+            return $http.get('/groups', {
+                headers: {Authorization: 'Bearer ' + auth.getToken()}
+            }).then(function(response) {
+                angular.copy(response.data, o.groups);
+            });
+        };
+
+        o.addGroup = function(group) {
+            return $http.post('/groups', group, {
+                headers: {Authorization: 'Bearer ' + auth.getToken()}
+            }).then(function(response) {
+                o.groups.push(response.data);
+            });
+        };
+
+        o.addChore = function(id, chore) {
+            return $http.post('/groups/' + id + '/chore', chore, {
+                headers: {Authorization: 'Bearer ' + auth.getToken()}
+            });
+        }
+
+
 
         return o;
 
 
-    });
+    }]);
 
 })();
 ;(function(){
 
     var choreIt = angular.module('choreIt');
 
-    choreIt.controller('MainCtrl', ['chores', function(chores) {
+    choreIt.controller('MainCtrl', ['chores', 'auth', function(chores, auth) {
         var self = this;
 
-        self.weeks = chores.weeks;
+        self.groups = chores.groups;
 
         //default
-        self.activeWeek = self.weeks[0];
+        if(self.groups) {
+            self.activeGroup = self.groups[0];            
+        }
 
-        self.setActiveWeek = function(index) {
-            self.activeWeek = self.weeks[index];
+        self.setActiveGroup = function(group) {
+            self.activeGroup = group;
         }
 
         self.addChore = function() {
-            self.activeWeek.chores.push({body: self.newChore, complete: false});
+            // self.activeGroup.chores.push({body: self.newChore, complete: false});
+
+            var id = self.activeGroup._id;
+            chores.addChore(id, {body: self.newChore}).then(function(response) {
+                //update local copy to reflect changes
+                self.activeGroup.chores.push(response.data);
+            });
             self.newChore = '';
         }
 
         self.toggleComplete = function(chore) {
             chore.complete = !chore.complete;
         }
+
+        self.addGroup = function() {
+            console.log(self.newGroup);
+            if(!self.newGroup || self.newGroup == '') {
+                return;
+            } else {                
+                var group = {};
+                if(auth.isLoggedIn()) {
+                    group.title = self.newGroup;
+                    group.username = auth.currentUser();
+                    chores.addGroup(group);
+                    self.newGroup = '';
+
+                } else {
+                    console.log('You must be logged in to add a group');
+                    //add more later - force state change to login?
+                    //no, just a link
+                }
+            }
+        }        
+        
     }]);
 
 })();

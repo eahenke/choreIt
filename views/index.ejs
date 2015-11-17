@@ -43,16 +43,27 @@
     <script type="text/ng-template" id="/home.html">
         
         <div class="col-md-3">
-            <h2>Weeks</h2>
+            <h2>Chore Groups</h2>
+            
+            <form ng-submit="main.addGroup()">
+                <h3>Add a Group</h3>
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="Group Name" ng-model="main.newGroup">
+                </div>
+                <button type="submit">Add Group</button>
+            </form>
+
             <ul>
-                <li ng-repeat="week in main.weeks" ng-click="main.setActiveWeek($index)"> {{week.week}}</li>
+                <li ng-repeat="group in main.groups | orderBy: 'date'" ng-click="main.setActiveGroup(group)"> {{group.title}}</li>
             </ul>
+
         </div>
 
         <div class="col-md-5">
             <h2>Chores</h2>
+            <h3>{{main.activeGroup.title}}</h3>
             <table class="table table-bordered">                
-                <tr ng-repeat="chore in main.activeWeek.chores">
+                <tr ng-repeat="chore in main.activeGroup.chores">
                     <td ng-class="{completed: chore.complete}">{{chore.body}}</td>
                     <td ng-click="main.toggleComplete(chore)">Toggle</td>
                     <td>Delete</td>
@@ -63,7 +74,7 @@
             <form ng-submit="main.addChore()">
                 <h3>Add a new chore</h3>
                 <div class="form-group">
-                    <input type="text" placeholder="Chore" ng-model="main.newChore">
+                    <input type="text" class="form-control" placeholder="Chore" ng-model="main.newChore">
                     <br />
                 </div>
 

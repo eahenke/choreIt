@@ -11,6 +11,11 @@
                 templateUrl: '/home.html',
                 controller: 'MainCtrl',
                 controllerAs: 'main',
+                resolve: {
+                    groupPromise: ['chores', function(chores) {
+                        return chores.getAllGroups();
+                    }]
+                }
             })
             //state for logging in returning users
             .state('login', {

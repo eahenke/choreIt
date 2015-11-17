@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 var ChoreSchema = new mongoose.Schema({
     body: String,
     complete: {type: Boolean, default: false},
-    week: {type: mongoose.Schema.Types.ObjectId, ref: 'Week'}
+    group: {type: mongoose.Schema.Types.ObjectId, ref: 'Group'}
 })
 
 ChoreSchema.methods.toggleComplete = function(cb) {

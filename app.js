@@ -6,7 +6,7 @@ var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
 var mongoose = require('mongoose');
-require('./models/Weeks');
+require('./models/Groups');
 require('./models/Chores');
 require('./models/Users');
 mongoose.connect('mongodb://localhost/choreIt');
