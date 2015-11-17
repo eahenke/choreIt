@@ -20,8 +20,8 @@
     <body ng-app="choreIt">
         <nav class="navbar navbar-default pull-right" ng-controller="NavCtrl as nav">
             <ul class="nav navbar-nav">
-                <li ng-show="nav.isLoggedIn()">{{ nav.currentUser }}</li>
-                <li ng-show="nav.isLoggedIn()" ng-click="nav.LogOut()">Log Out</li>
+                <li ng-show="nav.isLoggedIn()"><a>{{ nav.currentUser() }}</a></li>
+                <li ng-show="nav.isLoggedIn()"><a href='' ng-click="nav.logOut()">Log Out</a></li>
                 <li ng-hide="nav.isLoggedIn()"><a href='/#/register'>Register</a></li>
                 <li ng-hide="nav.isLoggedIn()"><a href='/#/login'>Login</a></li>
             </ul>
@@ -73,7 +73,8 @@
     </script>
 
     <!-- Register template -->
-    <script type="text/ng-template" id="/register">
+    <script type="text/ng-template" id="/register.html">
+        <div class="col-md-6 col-md-offset-3">
         <div class="alert alert-danger row" ng-show="auth.error">
             <span>{{ auth.error.data.message }}</span>
         </div>
@@ -89,15 +90,18 @@
             </div>
             <button type="submit" class="btn btn-primary">Register</button>
         </form>
+        </div>
     </script>
 
     <!-- Login template -->
-    <script type="text/ng-template" id="/login">
+    <script type="text/ng-template" id="/login.html">
+        <div class="col-md-6 col-md-offset-3">
+
         <div class="alert alert-danger row" ng-show="auth.error">
             <span>{{ auth.error.data.message }}</span>
         </div>
 
-        <form ng-submit="auth.login()">
+        <form ng-submit="auth.logIn()">
             <h3>Register</h3>
             <div class="form-group">
                 <input type="text" class="form-control" placeholder="Username" ng-model="auth.user.username" />
@@ -108,6 +112,7 @@
             </div>
             <button type="submit" class="btn btn-primary">Log In</button>
         </form>
+        </div>
     </script>
 
 

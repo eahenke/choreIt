@@ -5,8 +5,8 @@ var jwt = require('jsonwebtoken');
 var UserSchema = new mongoose.Schema({
     username: {type: String, lowercase: true, unique: true},
     hash: String,
-    salt: String
-    weeks: [{type: mongoose.Schema.Types.ObjectId, ref: 'Week'}];
+    salt: String,
+    weeks: [{type: mongoose.Schema.Types.ObjectId, ref: 'Week'}]
 });
 
 UserSchema.methods.setPassword = function(password) {
@@ -19,13 +19,12 @@ UserSchema.methods.validPassword = function(password) {
     return this.hash === hash;
 };
 
-UserSchema.generateJWT = function() {
-    //60 day expiration
+UserSchema.methods.generateJWT = function() {
+    //set expiration to 60 days
     var today = new Date();
     var exp = new Date(today);
     exp.setDate(today.getDate() + 60);
 
-    //change SECRET later!
     return jwt.sign({
         _id: this._id,
         username: this.username,

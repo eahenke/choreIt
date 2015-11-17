@@ -17,6 +17,7 @@ passport.use('login', new LocalStrategy(
     }    
 ));
 
+/*
 passport.use('register', new LocalStrategy(function(username, password, done) {
     User.findOne({username: username}, function(err, user) {
         if(err) {
@@ -40,4 +41,6 @@ passport.use('register', new LocalStrategy(function(username, password, done) {
             });
         }
     })
+
 }))
+*/

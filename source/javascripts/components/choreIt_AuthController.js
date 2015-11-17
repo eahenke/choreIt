@@ -8,9 +8,9 @@
         self.register = function() {
             auth.register(self.user).catch(function(error) {
                 self.error = error;
-                console.log(error.data.message);
+                console.log(error);
             }).then(function() {
-                if(!error) {
+                if(!self.error) {
                     $state.go('home');
                 }
             })
