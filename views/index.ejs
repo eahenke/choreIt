@@ -60,15 +60,15 @@
             <form ng-submit="main.addGroup()">
                 <h3>Add a Group</h3>
                 <div class="form-group">
-                    <input type="text" class="form-control" placeholder="Group Name" ng-model="main.newGroup">
+                    <input type="text" class="form-control" placeholder="Group Name" maxlength="25" ng-model="main.newGroup">
                 </div>
                 <button class="btn btn-primary" type="submit">Add Group</button>
             </form>
 
 
             
-                <div class="group" ng-repeat="group in main.groups | orderBy: 'date'" ng-click="main.setActiveGroup(group)">
-                {{group.title}}
+                <div class="group" ng-repeat="group in main.groups | orderBy: 'date'">
+                <span ng-click="main.setActiveGroup(group)">{{group.title}}</span>
                 <a class="del pull-right" href="" ng-click="main.deleteGroup(group)">Delete</a>
                 </div>
             
@@ -82,6 +82,8 @@
                 <h3>{{main.activeGroup.title}}</h3>
 
                 <!--add warning for no chores.  currently doesnt update-->
+
+                <p class="no-content-warning bg-warning" ng-show="!main.activeGroup.chores.length">This group doesn&#39;t have any chores.</p>
 
                 <table class="table table-bordered">                
                     <tr ng-repeat="chore in main.activeGroup.chores">
