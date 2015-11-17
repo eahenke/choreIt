@@ -2,6 +2,7 @@
 
     var choreIt = angular.module('choreIt');
 
+    //Controller for main chores section
     choreIt.controller('MainCtrl', ['$scope', 'chores', 'auth', function($scope, chores, auth) {
         var self = this;
 
@@ -12,13 +13,13 @@
             self.activeGroup = self.groups[0];            
         }
 
+        //sets the active group to display
         self.setActiveGroup = function(group) {
             self.activeGroup = group;
         }
 
-        self.addChore = function() {
-            // self.activeGroup.chores.push({body: self.newChore, complete: false});
-
+        //calls chores service add chores to the currently active group
+        self.addChore = function() {           
             var id = self.activeGroup._id;
             chores.addChore(id, {body: self.newChore}).then(function(response) {
                 //update local copy to reflect changes
@@ -31,23 +32,22 @@
             chore.complete = !chore.complete;
         }
 
+        //calls chores service to add group
         self.addGroup = function() {
-            console.log(self.newGroup);
+            //must have content
             if(!self.newGroup || self.newGroup == '') {
                 return;
             } else {                
                 var group = {};
+                //Must be logged in to add
                 if(auth.isLoggedIn()) {
                     group.title = self.newGroup;
                     group.username = auth.currentUser();
-                    chores.addGroup(group);
-
-                    // //reassign active group
-                    // if(!self.activeGroup) {
-                    //     self.activeGroup = group;
-                    // }
-
-                    assignActiveGroup('add', group);
+                    //add the group
+                    chores.addGroup(group).then(function(response) {
+                        reassignActiveGroup('add', response.data);
+                    });
+                    
 
                     self.newGroup = '';
 
@@ -59,45 +59,44 @@
             }
         };
 
+        //Calls chore service to delete groups
         self.deleteGroup = function(group) {
-            // console.dir(self.groups.indexOf(group));
+            
             chores.deleteGroup(group._id).then(function() {
                 //update local copy
-                console.dir(self.groups.indexOf(group));
                 self.groups.splice(self.groups.indexOf(group), 1);
                 
-                // //reassign active group
-                // if(group == self.activeGroup) {
-                //     if(self.groups.length) {
-                //         self.activeGroup = self.groups[self.groups.length -1];
-                //     } else {
-                //         self.activeGroup = null;                        
-                //     }
-                // }
-
-                assignActiveGroup('delete', group);
+                //assign new active group
+                reassignActiveGroup('delete', group);
             });
         };
 
+        //Calls chore service to delete chores
         self.deleteChore = function(chore) {
             var group = self.activeGroup;
             chores.deleteChore(group._id, chore._id).then(function() {
+                //update local copy
                 group.chores.splice(group.chores.indexOf(chore), 1);
             });
         };
 
-        function assignActiveGroup(action, group) {
+        //based on action taken, assigns a new active group (first group, or activeGroup deleted)
+        function reassignActiveGroup(action, group) {
+
             if(action == 'delete') {
-               //reassign active group
+               //if deleted current group
                 if(group == self.activeGroup) {
                     if(self.groups.length) {
+                        //make final remaining group active
                         self.activeGroup = self.groups[self.groups.length -1];
                     } else {
+                        //all groups gone
                         self.activeGroup = null;                        
                     }
                 } 
             } else if(action == 'add') {
-                //reassign active group
+
+                //no current groups
                 if(!self.activeGroup) {
                     self.activeGroup = group;
                 }                

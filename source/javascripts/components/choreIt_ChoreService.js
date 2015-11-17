@@ -18,7 +18,9 @@
             return $http.post('/groups', group, {
                 headers: {Authorization: 'Bearer ' + auth.getToken()}
             }).then(function(response) {
+                
                 o.groups.push(response.data);
+                return response;
             });
         };
 
