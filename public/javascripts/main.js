@@ -72,28 +72,31 @@
 ;(function(){
     var choreIt = angular.module('choreIt');
 
+    //Controller for authenticating users
     choreIt.controller('AuthCtrl', ['$state', 'auth', function($state, auth) {
         var self = this;
         self.user = {};
 
+        //calls auth service to register user - if no error, redirect to chores state
         self.register = function() {
             auth.register(self.user).catch(function(error) {
                 self.error = error;
                 console.log(error);
             }).then(function() {
                 if(!self.error) {
-                    $state.go('home');
+                    $state.go('chores');
                 }
             })
         };
 
+        //calls auth service to log in user - if no error, redirect to chores state
         self.logIn = function() {
             auth.logIn(self.user).catch(function(error) {
                 self.error = error;
                 console.log(error.data.message);
             }).then(function() {
                 if(!self.error) {
-                    $state.go('home');                
+                    $state.go('chores');                
                 }
             })
         };
@@ -103,22 +106,27 @@
 ;(function(){
     var choreIt = angular.module('choreIt');
 
+    //Service for authenticating users
     choreIt.factory('auth', ['$window', '$http', '$state', function($window, $http, $state) {        
         var auth = {};
 
+        //Retrieve token from local storage
         auth.getToken = function() {
             return $window.localStorage['choreIt-token'];
         };
 
+        //save token to local storage
         auth.saveToken = function(token) {
             $window.localStorage['choreIt-token'] = token;
         };
 
+        //log out by deleting a users local token
         auth.logOut = function() {
             $window.localStorage.removeItem('choreIt-token');
             $state.go('home');
         };
 
+        //register a user - if successful, save their token
         auth.register = function(user) {
             return $http.post('/register', user).then(function(response) {
                 if(response.data.token) {
@@ -127,6 +135,7 @@
             });
         };
 
+        //log in a user - if successful, save their token
         auth.logIn = function(user) {
           console.log(user);
           return $http.post('/login', user).then(function(response) {
@@ -136,6 +145,7 @@
             });  
         };
 
+        //Checks for local token and expiration.  If good, return true
         auth.isLoggedIn = function() {
             var token = auth.getToken();
             if(token) {
@@ -146,6 +156,7 @@
             }
         }
 
+        //returns current user, from local token
         auth.currentUser = function() {
             if(auth.isLoggedIn()) {
                 var token = auth.getToken();
@@ -158,11 +169,6 @@
     }]);
 
 
-})();
-;(function(){
-    var choreIt = angular.module('choreIt');
-
-    // choreIt.controller('ChoreCtrl', ['chores', 'chore', 'auth', ])
 })();
 ;(function(){
     var choreIt = angular.module('choreIt');
@@ -325,7 +331,7 @@
 })();
 ;(function() {
     var choreIt = angular.module('choreIt');
-
+    //Controller for navbar, just passes to auth service
     choreIt.controller('NavCtrl', ['auth', function(auth) {
         var self = this;
         self.isLoggedIn = auth.isLoggedIn;
