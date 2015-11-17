@@ -42,7 +42,7 @@
 
     <script type="text/ng-template" id="/home.html">
         
-        <div class="col-md-3">
+        <div class="col-md-3 col-md-offset-1 group-sidebar">
             <h2>Chore Groups</h2>
             
             <form ng-submit="main.addGroup()">
@@ -50,7 +50,7 @@
                 <div class="form-group">
                     <input type="text" class="form-control" placeholder="Group Name" ng-model="main.newGroup">
                 </div>
-                <button type="submit">Add Group</button>
+                <button class="btn btn-primary" type="submit">Add Group</button>
             </form>
 
             <ul>
@@ -80,7 +80,7 @@
                     <br />
                 </div>
 
-                <button type="submit">Add</button>          
+                <button class="btn btn-primary" type="submit">Add</button>          
             </form>
         </div>
     </script>

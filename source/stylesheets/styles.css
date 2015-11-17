@@ -2,9 +2,9 @@ html {
     padding: 0;
 }
 
-/*quick fix*/
-.page-header, h1 {
-    margin-top: 0;
+
+.group-sidebar {
+    border-right: 1px solid #eee;
 }
 
 form {
