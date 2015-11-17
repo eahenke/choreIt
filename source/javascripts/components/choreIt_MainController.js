@@ -62,6 +62,13 @@
                     self.activeGroup = null;
                 }
             });
+        };
+
+        self.deleteChore = function(chore) {
+            var group = self.activeGroup;
+            chores.deleteChore(group._id, chore._id).then(function() {
+                group.chores.splice(group.chores.indexOf(chore), 1);
+            });
         }
         
     }]);

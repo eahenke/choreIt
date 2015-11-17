@@ -68,7 +68,7 @@
                 <tr ng-repeat="chore in main.activeGroup.chores">
                     <td ng-class="{completed: chore.complete}">{{chore.body}}</td>
                     <td ng-click="main.toggleComplete(chore)">Toggle</td>
-                    <td>Delete</td>
+                    <td ng-click="main.deleteChore(chore)">Delete</td>
                     <td>Edit</td>
                 </tr>
             </table>

@@ -34,6 +34,12 @@
             });
         };
 
+        o.deleteChore = function(groupId, choreId) {
+            return $http.delete('/groups/' + groupId + '/chores/' + choreId, {
+               headers: {Authorization: 'Bearer ' + auth.getToken()} 
+            });
+        }
+
 
         return o;
 

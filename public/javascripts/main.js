@@ -176,6 +176,12 @@
             });
         };
 
+        o.deleteChore = function(groupId, choreId) {
+            return $http.delete('/groups/' + groupId + '/chores/' + choreId, {
+               headers: {Authorization: 'Bearer ' + auth.getToken()} 
+            });
+        }
+
 
         return o;
 
@@ -246,6 +252,13 @@
                 if(group == self.activeGroup) {
                     self.activeGroup = null;
                 }
+            });
+        };
+
+        self.deleteChore = function(chore) {
+            var group = self.activeGroup;
+            chores.deleteChore(group._id, chore._id).then(function() {
+                group.chores.splice(group.chores.indexOf(chore), 1);
             });
         }
         

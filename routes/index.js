@@ -37,8 +37,23 @@ router.param('group', function(req, res, next, id) {
     })
 });
 
+//chore preloader
+router.param('chore', function(req, res, next, id) {
+    var query = Chore.findById(id);
+
+    query.exec(function(err, chore) {
+        if(err) {
+            return next(err);
+        }
+        if(!chore) {
+            return next(new Error('Can\'t find chore'));
+        }
+        req.chore = chore;
+        return next();
+    })
+});
+
 //view all groups
-//request will have to have a user
 
 //Get all groups by user
 router.get('/groups', auth, function(req, res, next) {
@@ -83,6 +98,7 @@ router.post('/groups/:group/chore', auth, function(req, res, next) {
     });
 });
 
+//delete a group
 router.delete('/groups/:group', auth, function(req, res, next) {
     var group = req.group;
     group.remove(function(err) {
@@ -91,7 +107,19 @@ router.delete('/groups/:group', auth, function(req, res, next) {
         }
         console.log('deleting group');
         res.json(group);
-    })
+    });
+});
+
+//delete a chore
+router.delete('/groups/:group/chores/:chore', auth, function(req, res, next) {
+    var chore = req.chore;
+    chore.remove(function(err) {
+        if(err) {
+            return next(err);
+        }
+        console.log('deleting chore');
+        res.json(chore);
+    });
 });
 
 
