@@ -78,6 +78,17 @@ router.post('/groups', auth, function(req, res, next) {
     })
 });
 
+//delete a group
+router.delete('/groups/:group', auth, function(req, res, next) {
+    var group = req.group;
+    group.remove(function(err) {
+        if(err) {
+            return next(err);
+        }
+        console.log('deleting group');
+        res.json(group);
+    });
+});
 
 //add a new chore
 router.post('/groups/:group/chore', auth, function(req, res, next) {
@@ -98,17 +109,6 @@ router.post('/groups/:group/chore', auth, function(req, res, next) {
     });
 });
 
-//delete a group
-router.delete('/groups/:group', auth, function(req, res, next) {
-    var group = req.group;
-    group.remove(function(err) {
-        if(err) {
-            return next(err);
-        }
-        console.log('deleting group');
-        res.json(group);
-    });
-});
 
 //delete a chore
 router.delete('/groups/:group/chores/:chore', auth, function(req, res, next) {
@@ -118,6 +118,19 @@ router.delete('/groups/:group/chores/:chore', auth, function(req, res, next) {
             return next(err);
         }
         console.log('deleting chore');
+        res.json(chore);
+    });
+});
+
+//toggle a chore's completed status
+//requiring auth breaks for some reason
+//says no auth token found
+router.put('/groups/:group/chores/:chore/completed', auth, function(req, res, next) {
+    var chore = req.chore;
+    chore.toggleComplete(function(err, chore) {
+        if(err) {
+            return next(err);
+        }
         res.json(chore);
     });
 });

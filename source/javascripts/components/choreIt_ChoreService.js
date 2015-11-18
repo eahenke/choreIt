@@ -40,7 +40,15 @@
             return $http.delete('/groups/' + groupId + '/chores/' + choreId, {
                headers: {Authorization: 'Bearer ' + auth.getToken()} 
             });
-        }
+        };
+
+        o.toggleComplete = function(groupId, choreId) {
+            console.log('let\'s toggle');
+            console.log(auth.getToken());
+            return $http.put('/groups/' + groupId + '/chores/' + choreId + '/completed', {
+                headers: {Authorization: 'Bearer ' + auth.getToken()}
+            });
+        };
 
 
         return o;

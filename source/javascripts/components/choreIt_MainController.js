@@ -29,7 +29,16 @@
         }
 
         self.toggleComplete = function(chore) {
-            chore.complete = !chore.complete;
+            var group = self.activeGroup;
+            chores.toggleComplete(group._id, chore._id).then(function(response) {
+                console.log('working');
+
+                //update local version
+                chore.complete = !chore.complete;
+            }, function(error) {
+                console.dir(error);
+            });
+
         }
 
         //calls chores service to add group
