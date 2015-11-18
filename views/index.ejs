@@ -18,19 +18,20 @@
         <script src="/javascripts/main.js"></script>
     </head>
     <body ng-app="choreIt">
-        <nav class="navbar navbar-default pull-right" ng-controller="NavCtrl as nav">
-            <ul class="nav navbar-nav">
-                <li ng-show="nav.isLoggedIn()"><a>{{ nav.currentUser() }}</a></li>
+        <nav class="navbar navbar-default" ng-controller="NavCtrl as nav">
+            <a class="navbar-brand" href="/#/home">ChoreIt</a>
+            <ul class="nav navbar-nav pull-right">
+                <li ng-show="nav.isLoggedIn()"><a href="/#/chores">{{ nav.currentUser() }}</a></li>
                 <li ng-show="nav.isLoggedIn()"><a href='' ng-click="nav.logOut()">Log Out</a></li>
                 <li ng-hide="nav.isLoggedIn()"><a href='/#/register'>Register</a></li>
                 <li ng-hide="nav.isLoggedIn()"><a href='/#/login'>Login</a></li>
             </ul>
         </nav>
 
-        <div class="row">
+        <div class="row" ng-controller="NavCtrl as nav" ng-show="nav.isLoggedIn()">
             <div class="col-md-6 col-md-offset-3">
                 <div class="page-header">
-                    <h1>ChoreIt</h1>
+                    <h1>{{nav.currentUser()}}</h1>
                 </div>
             </div>
         </div>
@@ -42,11 +43,12 @@
 
         <!-- home template -->
         <script type="text/ng-template" id="/home.html">
-            <div class="col-md-6 col-md-offset-3">
-                <p>Hello, please either
-                    <a href="/#/register">Register</a>
-                    or
-                    <a href="/#/login">Log In</a>
+            <div class="col-md-8 col-md-offset-2 bg-primary welcome">
+            <!--<div class="jumbotron col-md-7"-->
+                <h1>Welcome</h1>
+                <p>Please either register or log in to ChoreIt.</p>
+                <button class="btn"><a href="/#/register">Register</a></button>
+                <button class="btn"><a href="/#/login">Log In</a></button>
             </div>
         </script>
 
