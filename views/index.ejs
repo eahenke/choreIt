@@ -69,13 +69,16 @@
             
                 <div class="group" ng-repeat="group in main.groups | orderBy: 'date'">
                     <span ng-hide="group.editMode" ng-click="main.setActiveGroup(group)">{{group.title}}</span>
-                    <input type="text" placeholder="{{group.title}}" focus-on-show ng-show="group.editMode" ng-model="group.editText" />
-                    <button ng-show="group.editMode" ng-click="main.editGroup(group)">Save</button>
-                    
+                    <form class="edit-form" ng-show="group.editMode" ng-submit="main.editGroup(group)">
+                        <input type="text" placeholder="{{group.title}}" focus-on-show ng-show="group.editMode" ng-model="group.editText" />
+                        <button class="btn" type="submit">Save</button>
+                    </form>
+
                     <span class="group-controls pull-right">
                         <span class="glyphicon glyphicon-pencil" ng-click="main.setGroupEditMode(group)"></span>
                         <span class="glyphicon glyphicon-remove text-danger" ng-click="main.deleteGroup(group)"></span>
                     </span>
+
                 </div>
             
 
@@ -94,11 +97,13 @@
                 <table class="table table-bordered">                
                     <tr ng-repeat="chore in main.activeGroup.chores">
                         <td class="col-md-5">
-                        <span ng-hide="chore.editMode" ng-class="{completed: chore.complete}">
-                          {{chore.body}}
-                        </span>
-                        <input type="text" placeholder="{{chore.body}}" focus-on-show ng-show="chore.editMode" ng-model="chore.editText">
-                        <button ng-show="chore.editMode" ng-click="main.editChore(chore)">Save</button>
+                            <span ng-hide="chore.editMode" ng-class="{completed: chore.complete}">
+                              {{chore.body}}
+                            </span>
+                            <form class="edit-form" ng-submit="main.editChore(chore)" ng-show="chore.editMode">
+                                <input type="text" placeholder="{{chore.body}}" focus-on-show ng-show="chore.editMode" ng-model="chore.editText">
+                                <button class="btn" type="submit">Save</button>
+                            </form>
                         </td>
 
                         <td class="col-md-1" ng-click="main.toggleComplete(chore)"><span class="glyphicon glyphicon-ok text-success" ng-class="{'text-danger': chore.complete}"></span></td>

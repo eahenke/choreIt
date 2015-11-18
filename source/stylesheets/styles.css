@@ -29,7 +29,14 @@ body {
     overflow: hidden;
 }
 
-/*group title in sidebar*/
+.group input {
+    width: 75%;
+}
+
+.group-controls > span:not(:first-child) {
+    margin-left: 15px;
+}
+
 .glyphicon, .group > span, del {
     cursor: pointer;
 }
@@ -37,6 +44,10 @@ body {
 
 form {
     margin-top: 30px;
+}
+
+.edit-form {
+    margin: 0;
 }
 
 /* Chore Tables */
