@@ -8,40 +8,17 @@
 
         self.groups = chores.groups;
 
-        self.choreEditMode = false;
-
-        //default
+        //default - change later to save last active group to user in db for persistence
         if(self.groups) {
             self.activeGroup = self.groups[0];            
         }
 
+        //Group methods
+
         //sets the active group to display
         self.setActiveGroup = function(group) {
             self.activeGroup = group;
-        }
-
-        //calls chores service add chores to the currently active group
-        self.addChore = function() {           
-            var id = self.activeGroup._id;
-            chores.addChore(id, {body: self.newChore}).then(function(response) {
-                //update local copy to reflect changes
-                self.activeGroup.chores.push(response.data);
-            });
-            self.newChore = '';
-        }
-
-        self.toggleComplete = function(chore) {
-            var group = self.activeGroup;
-            chores.toggleComplete(group._id, chore._id).then(function(response) {
-                console.log('working');
-
-                //update local version
-                chore.complete = !chore.complete;
-            }, function(error) {
-                console.dir(error);
-            });
-
-        }
+        };
 
         //calls chores service to add group
         self.addGroup = function() {
@@ -71,14 +48,35 @@
         };
 
         //Calls chore service to delete groups
-        self.deleteGroup = function(group) {
-            
+        self.deleteGroup = function(group) {            
             chores.deleteGroup(group._id).then(function() {
                 //update local copy
-                self.groups.splice(self.groups.indexOf(group), 1);
-                
+                self.groups.splice(self.groups.indexOf(group), 1);                
                 //assign new active group
                 reassignActiveGroup('delete', group);
+            });
+        };
+
+        //Chore Methods
+
+        //calls chores service add chores to the currently active group
+        self.addChore = function() {           
+            var id = self.activeGroup._id;
+            chores.addChore(id, {body: self.newChore}).then(function(response) {
+                //update local copy to reflect changes
+                self.activeGroup.chores.push(response.data);
+            });
+            self.newChore = '';
+        };
+
+        //calls chore service to toggle the 'complete' property of a chore
+        self.toggleComplete = function(chore) {
+            var group = self.activeGroup;
+            chores.toggleComplete(group._id, chore._id).then(function(response) {
+                //update local version
+                chore.complete = !chore.complete;
+            }, function(error) {
+                console.dir(error);
             });
         };
 
@@ -91,25 +89,36 @@
             });
         };
 
+        //Sets a chore into edit mode, enabling editing of text body
+        self.setChoreEditMode = function(chore) {
+            chore.editMode = true;
+        };
+
+        //call chore service to edit chore text
+        //currently activated on input blur, consider adding 'save' button?
         self.editChore = function(chore) {
             var group = self.activeGroup;
-            chores.editChore(group._id, chore._id, {newBody: self.choreEditText}).then(function() {
-                chore.body = self.choreEditText;
-            }, function(error) {
-                console.dir(error);
-            });
-            self.choreEditText = '';
-            self.choreEditMode = false;
+            //must have content
+            if(chore.editText != '' && chore.editText) {
+                //call chore service to save to db
+                chores.editChore(group._id, chore._id, {newBody: chore.editText}).then(function() {
+                    //update local copy and end edit mode
+                    chore.body = chore.editText;
+                    chore.editText = '';
+                    chore.editMode = false;
+                }, function(error) {
+                    //add better error handling later
+                    console.dir(error);
+                });            
+            } else {
+                //no content, end edit mode
+                chore.editMode = false;
+            }
+        };
 
-        }
-
-        self.setChoreEditMode = function() {
-            self.choreEditMode = true;
-        }
 
         //based on action taken, assigns a new active group (first group, or activeGroup deleted)
         function reassignActiveGroup(action, group) {
-
             if(action == 'delete') {
                //if deleted current group
                 if(group == self.activeGroup) {
@@ -122,14 +131,13 @@
                     }
                 } 
             } else if(action == 'add') {
-
                 //no current groups
                 if(!self.activeGroup) {
                     self.activeGroup = group;
                 }                
             }
         }
-        
+                
     }]);
 
 })();
