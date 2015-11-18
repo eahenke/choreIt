@@ -47,7 +47,7 @@
             }
         };
 
-        //Sets a chore into edit mode, enabling editing of text body
+        //Sets a group into edit mode, enabling editing of title
         self.setGroupEditMode = function(group) {            
             console.dir(group);
             //allow editing only one at a time
@@ -59,6 +59,7 @@
             group.editMode = true;
         };
 
+        //calls chores service to edit a group's title
         self.editGroup = function(group) {
 
             //must have content
