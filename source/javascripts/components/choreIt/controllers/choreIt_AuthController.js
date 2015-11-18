@@ -20,6 +20,9 @@
 
         //calls auth service to log in user - if no error, redirect to chores state
         self.logIn = function() {
+            //don't save errors across multiple attempts
+            self.error = null;
+
             auth.logIn(self.user).catch(function(error) {
                 self.error = error;
                 console.log(error.data.message);
