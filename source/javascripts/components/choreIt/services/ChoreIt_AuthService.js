@@ -32,7 +32,6 @@
 
         //log in a user - if successful, save their token
         auth.logIn = function(user) {
-          console.log(user);
           return $http.post('/login', user).then(function(response) {
                 if(response.data.token) {
                     auth.saveToken(response.data.token);
