@@ -49,14 +49,16 @@
 
         //Sets a group into edit mode, enabling editing of title
         self.setGroupEditMode = function(group) {            
-            console.dir(group);
             //allow editing only one at a time
-            if(self.groups.length > 1) {
+            if(self.groups) {
                 self.groups.forEach(function(otherGroup) {
-                    otherGroup.editMode = false;
+                    if(otherGroup !== group) {
+                        otherGroup.editMode = false;                        
+                    }
                 });                
             }
-            group.editMode = true;
+            //toggle
+            group.editMode = !group.editMode;
         };
 
         //calls chores service to edit a group's title
@@ -104,13 +106,17 @@
 
         //calls chore service to toggle the 'complete' property of a chore
         self.toggleComplete = function(chore) {
-            var group = self.activeGroup;
-            chores.toggleComplete(group._id, chore._id).then(function(response) {
-                //update local version
-                chore.complete = !chore.complete;
-            }, function(error) {
-                console.dir(error);
-            });
+            //disallow during editMode
+            if(!chore.editMode) {
+                var group = self.activeGroup;
+                chores.toggleComplete(group._id, chore._id).then(function(response) {
+                    //update local version
+                    chore.complete = !chore.complete;
+                }, function(error) {
+                    console.dir(error);
+                });
+                
+            }
         };
 
         //Calls chore service to delete chores
@@ -128,10 +134,12 @@
 
             //allow editing only one at a time
             group.chores.forEach(function(otherChore) {
-                otherChore.editMode = false;
+                if(otherChore !== chore) {
+                    otherChore.editMode = false;                    
+                }
             });
-
-            chore.editMode = true;
+            //toggle
+            chore.editMode = !chore.editMode;
         };
 
         //call chore service to edit chore text
