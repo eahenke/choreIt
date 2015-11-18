@@ -91,6 +91,13 @@
 
         //Sets a chore into edit mode, enabling editing of text body
         self.setChoreEditMode = function(chore) {
+            var group = self.activeGroup;
+
+            //allow editing only one at a time
+            group.chores.forEach(function(otherChore) {
+                otherChore.editMode = false;
+            });
+
             chore.editMode = true;
         };
 
@@ -98,6 +105,7 @@
         //currently activated on input blur, consider adding 'save' button?
         self.editChore = function(chore) {
             var group = self.activeGroup;
+
             //must have content
             if(chore.editText != '' && chore.editText) {
                 //call chore service to save to db

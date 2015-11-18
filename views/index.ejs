@@ -91,7 +91,7 @@
                         <span ng-hide="chore.editMode">
                           {{chore.body}}
                         </span>
-                        <input type="text" placeholder="{{chore.body}}" ng-show="chore.editMode" ng-model="chore.editText" ng-blur="main.editChore(chore)">
+                        <input type="text" placeholder="{{chore.body}}" ng-show="chore.editMode" ng-model="chore.editText">
                         <button ng-show="chore.editMode" ng-click="main.editChore(chore)">Save</button>
                         </td>
 
