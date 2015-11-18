@@ -39,6 +39,8 @@ form {
     margin-top: 30px;
 }
 
+/* Chore Tables */
+
 .completed {
     text-decoration: line-through;
     color: red;
