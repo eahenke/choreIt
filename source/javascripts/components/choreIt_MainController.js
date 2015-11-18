@@ -8,6 +8,8 @@
 
         self.groups = chores.groups;
 
+        self.choreEditMode = false;
+
         //default
         if(self.groups) {
             self.activeGroup = self.groups[0];            
@@ -88,6 +90,22 @@
                 group.chores.splice(group.chores.indexOf(chore), 1);
             });
         };
+
+        self.editChore = function(chore) {
+            var group = self.activeGroup;
+            chores.editChore(group._id, chore._id, {newBody: self.choreEditText}).then(function() {
+                chore.body = self.choreEditText;
+            }, function(error) {
+                console.dir(error);
+            });
+            self.choreEditText = '';
+            self.choreEditMode = false;
+
+        }
+
+        self.setChoreEditMode = function() {
+            self.choreEditMode = true;
+        }
 
         //based on action taken, assigns a new active group (first group, or activeGroup deleted)
         function reassignActiveGroup(action, group) {

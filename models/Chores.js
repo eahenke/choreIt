@@ -11,6 +11,10 @@ ChoreSchema.methods.toggleComplete = function(cb) {
     this.save(cb);
 }
 
-//Add an edit method
+ChoreSchema.methods.edit = function(body, cb) {
+    this.body = body;
+    this.save(cb);
+}
+
 
 mongoose.model('Chore', ChoreSchema);

@@ -87,10 +87,16 @@
 
                 <table class="table table-bordered">                
                     <tr ng-repeat="chore in main.activeGroup.chores">
-                        <td ng-class="{completed: chore.complete}">{{chore.body}}</td>
+                        <td ng-class="{completed: chore.complete}">
+                        <span ng-show="!main.choreEditMode">
+                          {{chore.body}}
+                        </span>
+                        <input type="text" value="chore.body" ng-show="main.choreEditMode" ng-model="main.choreEditText" ng-blur="main.editChore(chore)">
+
+                        </td>
                         <td ng-click="main.toggleComplete(chore)">Toggle</td>
                         <td ng-click="main.deleteChore(chore)">Delete</td>
-                        <td>Edit</td>
+                        <td ng-click="main.setChoreEditMode()">Edit</td>
                     </tr>
                 </table>
 

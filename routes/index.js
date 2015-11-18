@@ -135,6 +135,23 @@ router.put('/groups/:group/chores/:chore/completed', auth, function(req, res, ne
     });
 });
 
+router.put('/groups/:group/chores/:chore/edit', function(req, res, next) {
+    var chore = req.chore;
+    chore.edit(req.body.newBody, function(err, chore) {
+        if(err) {
+            return next(err);
+        }
+        res.json(chore);
+    })
+    // chore.body = req.body.newBody;
+    // chore.save(function(err, chore) {
+    //     if(err) {
+    //         return err;
+    //     }
+    //     res.json(chore);
+    // });
+})
+
 
 //register
 router.post('/register', function(req, res, next){
