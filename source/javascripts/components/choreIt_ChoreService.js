@@ -24,6 +24,12 @@
             });
         };
 
+        o.editGroup = function(groupId, newTitle) {
+            return $http.put('/groups/' + groupId + '/edit', newTitle, {
+                headers: {Authorization: 'Bearer ' + auth.getToken()}  
+            });
+        }
+
         o.deleteGroup = function(id) {
             return $http.delete('/groups/' + id, {
                 headers: {Authorization: 'Bearer ' + auth.getToken()}

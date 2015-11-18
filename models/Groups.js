@@ -8,4 +8,9 @@ var GroupSchema = new mongoose.Schema({
     chores: [{type: mongoose.Schema.Types.ObjectId, ref: 'Chore'}]
 });
 
+GroupSchema.methods.editTitle = function(title, cb) {
+    this.title = title;
+    this.save(cb);
+}
+
 mongoose.model('Group', GroupSchema);

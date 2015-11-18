@@ -47,6 +47,38 @@
             }
         };
 
+        //Sets a chore into edit mode, enabling editing of text body
+        self.setGroupEditMode = function(group) {            
+            console.dir(group);
+            //allow editing only one at a time
+            if(self.groups.length > 1) {
+                self.groups.forEach(function(otherGroup) {
+                    otherGroup.editMode = false;
+                });                
+            }
+            group.editMode = true;
+        };
+
+        self.editGroup = function(group) {
+
+            //must have content
+            if(group.editText != '' && group.editText) {
+                //call chore service to save to db
+                chores.editGroup(group._id, {newTitle: group.editText}).then(function() {
+                    //update local copy and end edit mode
+                    group.title = group.editText;
+                    group.editText = '';
+                    group.editMode = false;
+                }, function(error) {
+                    //add better error handling later
+                    console.dir(error);
+                });            
+            } else {
+                //no content, end edit mode
+                group.editMode = false;
+            }
+        };
+
         //Calls chore service to delete groups
         self.deleteGroup = function(group) {            
             chores.deleteGroup(group._id).then(function() {

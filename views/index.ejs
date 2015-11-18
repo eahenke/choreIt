@@ -68,8 +68,14 @@
 
             
                 <div class="group" ng-repeat="group in main.groups | orderBy: 'date'">
-                <span ng-click="main.setActiveGroup(group)">{{group.title}}</span>
-                <a class="del pull-right" href="" ng-click="main.deleteGroup(group)">Delete</a>
+                    <span ng-hide="group.editMode" ng-click="main.setActiveGroup(group)">{{group.title}}</span>
+                    <input type="text" placeholder="{{group.title}}" ng-show="group.editMode" ng-model="group.editText" />
+                    <button ng-show="group.editMode" ng-click="main.editGroup(group)">Save</button>
+                    
+                    <span class="group-controls pull-right">
+                        <span class="glyphicon glyphicon-pencil" ng-click="main.setGroupEditMode(group)"></span>
+                        <span class="glyphicon glyphicon-remove text-danger" ng-click="main.deleteGroup(group)"></span>
+                    </span>
                 </div>
             
 

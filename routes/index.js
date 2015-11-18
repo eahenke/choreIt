@@ -110,6 +110,17 @@ router.post('/groups/:group/chore', auth, function(req, res, next) {
 });
 
 
+//edit a group's title
+router.put('/groups/:group/edit', function(req, res, next) {
+    var group = req.group;
+    group.editTitle(req.body.newTitle, function(err, chore) {
+        if(err) {
+            return next(err);
+        }
+        res.json(group);
+    });
+});
+
 //delete a chore
 router.delete('/groups/:group/chores/:chore', auth, function(req, res, next) {
     var chore = req.chore;
@@ -142,15 +153,8 @@ router.put('/groups/:group/chores/:chore/edit', function(req, res, next) {
             return next(err);
         }
         res.json(chore);
-    })
-    // chore.body = req.body.newBody;
-    // chore.save(function(err, chore) {
-    //     if(err) {
-    //         return err;
-    //     }
-    //     res.json(chore);
-    // });
-})
+    });
+});
 
 
 //register
