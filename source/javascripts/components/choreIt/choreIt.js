@@ -1,6 +1,6 @@
 //States
 ;(function(){
-    var choreIt = angular.module('choreIt', ['ui.router']);
+    var choreIt = angular.module('choreIt', ['ui.router', 'util']);
 
     choreIt.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, $urlRouterProvider) {
 
@@ -11,11 +11,6 @@
                 templateUrl: '/home.html',
                 controller: 'MainCtrl',
                 controllerAs: 'main',
-                // resolve: {
-                //     groupPromise: ['chores', function(chores) {
-                //         return chores.getAllGroups();
-                //     }]
-                // },
                 onEnter: ['auth', '$state', function(auth, $state) {
                     if(auth.isLoggedIn()) {
                         $state.go('chores');

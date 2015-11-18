@@ -69,7 +69,7 @@
             
                 <div class="group" ng-repeat="group in main.groups | orderBy: 'date'">
                     <span ng-hide="group.editMode" ng-click="main.setActiveGroup(group)">{{group.title}}</span>
-                    <input type="text" placeholder="{{group.title}}" ng-show="group.editMode" ng-model="group.editText" />
+                    <input type="text" placeholder="{{group.title}}" focus-on-show ng-show="group.editMode" ng-model="group.editText" />
                     <button ng-show="group.editMode" ng-click="main.editGroup(group)">Save</button>
                     
                     <span class="group-controls pull-right">
@@ -97,7 +97,7 @@
                         <span ng-hide="chore.editMode">
                           {{chore.body}}
                         </span>
-                        <input type="text" placeholder="{{chore.body}}" ng-show="chore.editMode" ng-model="chore.editText">
+                        <input type="text" placeholder="{{chore.body}}" focus-on-show ng-show="chore.editMode" ng-model="chore.editText">
                         <button ng-show="chore.editMode" ng-click="main.editChore(chore)">Save</button>
                         </td>
 
