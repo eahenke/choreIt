@@ -23,8 +23,8 @@
             <ul class="nav navbar-nav pull-right">
                 <li ng-show="nav.isLoggedIn()"><a href="/#/chores">{{ nav.currentUser() }}</a></li>
                 <li ng-show="nav.isLoggedIn()"><a href='' ng-click="nav.logOut()">Log Out</a></li>
-                <li ng-hide="nav.isLoggedIn()"><a href='/#/register'>Register</a></li>
-                <li ng-hide="nav.isLoggedIn()"><a href='/#/login'>Login</a></li>
+                <!-- <li ng-hide="nav.isLoggedIn()"><a href='/#/register'>Register</a></li>
+                <li ng-hide="nav.isLoggedIn()"><a href='/#/login'>Login</a></li> -->
             </ul>
         </nav>
 
@@ -47,9 +47,12 @@
             <!--<div class="jumbotron col-md-7"-->
                 <h1>Welcome</h1>
                 <p>Please either register or log in to ChoreIt.</p>
-                <button class="btn"><a href="/#/register">Register</a></button>
-                <button class="btn"><a href="/#/login">Log In</a></button>
+                <a ui-sref=".register"><button class="btn btn-inverse">Register</button></a>
+                <a ui-sref=".login"><button class="btn btn-inverse">Log In</button></a>
             </div>
+            
+                <ui-view></ui-view>
+            
         </script>
 
 
@@ -129,7 +132,7 @@
 
     <!-- Register template -->
     <script type="text/ng-template" id="/register.html">
-        <div class="col-md-6 col-md-offset-3">
+        <div class="col-md-6 col-md-offset-3 enter">
         <div class="alert alert-danger row" ng-show="auth.error">
             <span>{{ auth.error.data.message }}</span>
         </div>
@@ -150,7 +153,7 @@
 
     <!-- Login template -->
     <script type="text/ng-template" id="/login.html">
-        <div class="col-md-6 col-md-offset-3">
+        <div class="col-md-6 col-md-offset-3 enter">
 
         <div class="alert alert-danger row" ng-show="auth.error">
             <span>{{ auth.error.data.message }}</span>
