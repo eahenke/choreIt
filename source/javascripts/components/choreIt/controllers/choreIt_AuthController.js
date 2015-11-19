@@ -10,12 +10,6 @@
         self.register = function() {
             auth.register(self.user).catch(function(error) {
                 self.error = error;
-
-                //returns 500 when duplicate username, look into better mongodb error handling.
-                if(self.error.status == 500) {
-                    self.error.data = {message: 'That username is already taken.'};                    
-                }
-                console.log(error);
             }).then(function() {
                 if(!self.error) {
                     $state.go('chores');

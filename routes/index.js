@@ -170,10 +170,17 @@ router.post('/register', function(req, res, next){
   user.setPassword(req.body.password);
 
   user.save(function (err){
-    if(err){ return next(err); }
+    if(err) {
+        
+        //duplicate username
+        if(err.code == 11000) {
+             return res.status(401).json({message: "That username is already taken."});
+        } else {
+            return next(err);            
+        }
+    }
 
     var token = user.generateJWT();
-    // console.log(token);
     return res.json({token: token});
   });
 });
